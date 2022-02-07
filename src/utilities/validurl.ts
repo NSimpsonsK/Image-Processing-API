@@ -37,7 +37,6 @@ const validate = (
     }
   }
 
-  console.log(isNumeric(width as string) && isNumeric(height as string));
   if (errorMessage == '') {
     if (!isNumeric(width as string) && !isNumeric(height as string)) {
       errorMessage += 'Parameter Width and Height is not a Number';

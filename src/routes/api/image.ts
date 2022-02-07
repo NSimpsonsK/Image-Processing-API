@@ -4,15 +4,12 @@ import imageutil from './../../utilities/imageutil';
 const images = express.Router();
 
 images.get('/', (req, res) => {
-  console.log(req.query);
   try {
     const test = validateurl.validate(
       req.query.path,
       req.query.width,
       req.query.height
     );
-    console.log(test);
-    console.log(imageutil.filePresent(test[0]));
     imageutil.processImage(test[0], test[1], test[2]);
     res.send('All Parameters Valid');
   } catch (error) {

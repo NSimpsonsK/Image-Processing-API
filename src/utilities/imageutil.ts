@@ -1,43 +1,24 @@
 import sharp, { Sharp } from 'sharp';
 import fs from 'fs';
 
-async function resizeImage(inputFile: string, width: number, height: number) {
+function resizeImage(
+  fulldir: string,
+  thumbdir: string,
+  width: number,
+  height: number
+): Sharp {
   try {
-    const url: string = inputFile.split('.')[0];
-    const extension: string = inputFile.split('.')[1];
-    await sharp(`./assets/full/${inputFile}`)
+    return sharp(fulldir)
       .resize(width, height)
-      .toFile(
-        `./assets/thumb/${url}-${width}-${height}.${extension}`,
-        function (err) {}
-      );
+      .toFile(thumbdir, function (err) {});
   } catch (error) {
     console.log(error);
+    throw new Error(error as string);
   }
 }
 
-const processImage = (inputFile: string, width: number, height: number) => {
-  if (!resizedFilePresent(inputFile, width, height)) {
-    console.log(`resizing `);
-    resizeImage(inputFile, width, height);
-  } else {
-    console.log('Found Image so no need to resize');
-    return loadImage(inputFile + width + height);
-  }
-};
-
-const resizedFilePresent = (
-  inputFile: string,
-  width: number,
-  height: number
-): Boolean => {
-  const url: string = inputFile.split('.')[0];
-  const extension: string = inputFile.split('.')[1];
-  if (
-    fs.existsSync(
-      './assets/thumb/' + url + '-' + width + '-' + height + '.' + extension
-    )
-  ) {
+const resizedFilePresent = (thumbdir: string): Boolean => {
+  if (fs.existsSync(thumbdir)) {
     return true;
   }
   return false;
@@ -50,8 +31,22 @@ const filePresent = (inputFile: string): Boolean => {
   return false;
 };
 
-const loadImage = (inputFile: string): Sharp => {
-  return sharp(inputFile);
+const loadImage = (thumbdir: string): Sharp => {
+  return sharp(thumbdir);
+};
+
+const processImage = (inputFile: string, width: number, height: number) => {
+  const url: string = inputFile.split('.')[0];
+  const extension: string = inputFile.split('.')[1];
+  const fulldir = `./assets/full/${inputFile}`;
+  const thumbdir = `./assets/thumb/${url}-${width}-${height}.${extension}`;
+  if (!resizedFilePresent(thumbdir)) {
+    console.log(`resizing Image`);
+    resizeImage(fulldir, thumbdir, width, height);
+  } else {
+    console.log('Found Image, no resizing needed');
+    return loadImage(thumbdir);
+  }
 };
 
 export = {
