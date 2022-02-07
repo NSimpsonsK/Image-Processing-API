@@ -5,10 +5,10 @@ async function resizeImage(inputFile: string, width: number, height: number) {
   try {
     const url: string = inputFile.split('.')[0];
     const extension: string = inputFile.split('.')[1];
-    await sharp(`./images/${inputFile}`)
+    await sharp(`./assets/full/${inputFile}`)
       .resize(width, height)
       .toFile(
-        `./images/${url}-${width}-${height}.${extension}`,
+        `./assets/thumb/${url}-${width}-${height}.${extension}`,
         function (err) {}
       );
   } catch (error) {
@@ -35,7 +35,7 @@ const resizedFilePresent = (
   const extension: string = inputFile.split('.')[1];
   if (
     fs.existsSync(
-      './images/' + url + '-' + width + '-' + height + '.' + extension
+      './assets/thumb/' + url + '-' + width + '-' + height + '.' + extension
     )
   ) {
     return true;
@@ -44,7 +44,7 @@ const resizedFilePresent = (
 };
 
 const filePresent = (inputFile: string): Boolean => {
-  if (fs.existsSync('./images/' + inputFile)) {
+  if (fs.existsSync('./assets/full/' + inputFile)) {
     return true;
   }
   return false;
