@@ -13,6 +13,7 @@ images.get('/', (req, res) => {
     );
     console.log(test);
     console.log(imageutil.filePresent(test[0]));
+    imageutil.processImage(test[0], test[1], test[2]);
     res.send('All Parameters Valid');
   } catch (error) {
     const result = (error as Error).message;

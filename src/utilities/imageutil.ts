@@ -1,18 +1,28 @@
 import sharp, { Sharp } from 'sharp';
 import fs from 'fs';
 
-const resize = (
-  inputFile: string,
-  width: number,
-  heigt: number,
-  outputFile: string
-): Sharp => {
-  if (!resizedFilePresent(inputFile, width, heigt)) {
-    return sharp(inputFile)
-      .resize(width, heigt)
-      .toFile(outputFile + width + heigt, function (err) {});
+async function resizeImage(inputFile: string, width: number, height: number) {
+  try {
+    const url: string = inputFile.split('.')[0];
+    const extension: string = inputFile.split('.')[1];
+    await sharp(`./images/${inputFile}`)
+      .resize(width, height)
+      .toFile(
+        `./images/${url}-${width}-${height}.${extension}`,
+        function (err) {}
+      );
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+const processImage = (inputFile: string, width: number, height: number) => {
+  if (!resizedFilePresent(inputFile, width, height)) {
+    console.log(`resizing `);
+    resizeImage(inputFile, width, height);
   } else {
-    return loadImage(inputFile + width + heigt);
+    console.log('Found Image so no need to resize');
+    return loadImage(inputFile + width + height);
   }
 };
 
@@ -21,7 +31,13 @@ const resizedFilePresent = (
   width: number,
   height: number
 ): Boolean => {
-  if (fs.existsSync('./images/' + inputFile)) {
+  const url: string = inputFile.split('.')[0];
+  const extension: string = inputFile.split('.')[1];
+  if (
+    fs.existsSync(
+      './images/' + url + '-' + width + '-' + height + '.' + extension
+    )
+  ) {
     return true;
   }
   return false;
@@ -39,6 +55,7 @@ const loadImage = (inputFile: string): Sharp => {
 };
 
 export = {
-  resize,
-  filePresent
+  processImage,
+  filePresent,
+  resizedFilePresent
 };
