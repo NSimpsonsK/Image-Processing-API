@@ -11,8 +11,6 @@ const validate = (
   width: unknown,
   height: unknown
 ): [string, number, number] => {
-  let parsedwidth: number;
-  let parsedheight: number;
   let errorMessage: string = '';
   let parameters: string[] = [];
   if (path == undefined) {
