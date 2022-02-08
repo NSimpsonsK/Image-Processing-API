@@ -1,20 +1,17 @@
-import sharp, { Sharp } from 'sharp';
-import express from 'express';
-import fs from 'fs';
 
 function isNumeric(val: string) {
   return /^-?\d+$/.test(val);
 }
 
 const validate = (
-  path: unknown,
+  filename: unknown,
   width: unknown,
   height: unknown
 ): [string, number, number] => {
   let errorMessage: string = '';
   let parameters: string[] = [];
-  if (path == undefined) {
-    parameters.push('Path');
+  if (filename == undefined) {
+    parameters.push('Filename');
   }
   if (width == undefined) {
     parameters.push('Width');
@@ -49,7 +46,7 @@ const validate = (
     throw new Error(errorMessage);
   } else {
     return [
-      path as string,
+      filename as string,
       parseInt(width as string),
       parseInt(height as string)
     ];
