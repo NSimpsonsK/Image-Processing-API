@@ -25,7 +25,7 @@ images.get('/', async (req: express.Request, res: express.Response) => {
     res.sendFile(path.resolve(thumbdir));
   } catch (error) {
     const result = (error as Error).message;
-    res.send(result);
+    res.status(400).json( (error as Error).toString() );
   }
 });
 
