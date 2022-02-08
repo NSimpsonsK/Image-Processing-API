@@ -1,4 +1,3 @@
-
 function isNumeric(val: string) {
   return /^-?\d+$/.test(val);
 }
