@@ -3,9 +3,9 @@ function isNumeric(val: string) {
 }
 
 const validate = (
-  filename: unknown,
-  width: unknown,
-  height: unknown
+  filename: string | undefined,
+  width: string | undefined,
+  height: string | undefined
 ): [string, number, number] => {
   let errorMessage: string = '';
   let parameters: string[] = [];
